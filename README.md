@@ -13,7 +13,7 @@ Parte 2 — Escalonador
   7. PRIORIDADE
   8. ROUND-ROBIN
   9. REAL-TIME
- 10. Monitorar tempo e ciclos
+  10. Monitorar tempo e ciclos
 
 
 
