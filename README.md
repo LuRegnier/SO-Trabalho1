@@ -19,6 +19,8 @@ Parte 2 — Escalonador
 
 
 
+
+
 Primeiro Trabalho de Sistemas Operacionais – INF 1316 - 2025-1
 O primeiro trabalho consiste em programar em linguagem C programas que implementem um
 interpretador de comandos e um escalonador de programas. O interpretador deverá ler a
