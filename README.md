@@ -1,6 +1,23 @@
 # SO-Trabalho1
 
 
+Parte 1 — Interpretador
+  1. Ler e dividir linha por linha
+  2. Interpretar cada política e seus argumentos
+  3. Validar e armazenar num vetor
+  4. Verificar conflitos de tempo em REAL-TIME
+
+Parte 2 — Escalonador
+  5. Executar processos (fork/exec)
+  6. Controlar com sinais
+  7. PRIORIDADE
+  8. ROUND-ROBIN
+  9. REAL-TIME
+ 10. Monitorar tempo e ciclos
+
+
+
+
 Primeiro Trabalho de Sistemas Operacionais – INF 1316 - 2025-1
 O primeiro trabalho consiste em programar em linguagem C programas que implementem um
 interpretador de comandos e um escalonador de programas. O interpretador deverá ler a
