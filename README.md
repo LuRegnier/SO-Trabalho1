@@ -18,22 +18,22 @@
 
 ---
 
-### 🧠 PARTE 2 — Escalonador de Processos
+###  PARTE 3 — Escalonador de Processos
 
 - [ ] Iniciar cada processo com `fork()` e `exec()` (usando executáveis pré-compilados).
 - [ ] Aplicar `SIGSTOP` logo após `exec` para manter todos pausados até o escalonador assumir.
 - [ ] Implementar controle por política de escalonamento:
 
-#### 🎯 PRIORIDADE
+####  PRIORIDADE
 - [ ] Selecionar processo com menor valor de prioridade (maior prioridade lógica).
 - [ ] Enviar `SIGCONT` para o processo com maior prioridade.
 - [ ] Pausar os demais com `SIGSTOP`.
 
-#### 🔁 ROUND-ROBIN
+####  ROUND-ROBIN
 - [ ] Executar os processos em ordem de chegada.
 - [ ] Alternar a execução a cada 1 UT (1 segundo), usando `SIGSTOP`/`SIGCONT`.
 
-#### ⏱ REAL-TIME
+####  REAL-TIME
 - [ ] Verificar o tempo atual dentro do minuto (usar `gettimeofday()` ou `time()`).
 - [ ] Ativar processo apenas se dentro de seu intervalo `[I, I+D)`.
 - [ ] Garantir que não haja sobreposição com outros REAL-TIME.
