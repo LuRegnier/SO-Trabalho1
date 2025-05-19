@@ -9,6 +9,7 @@ Parte 1 — Interpretador
 
 Parte 2 — Escalonador
   5. Executar processos (fork/exec)
+  
   6. Controlar com sinais
   7. PRIORIDADE
   8. ROUND-ROBIN
