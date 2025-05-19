@@ -1,20 +1,45 @@
 # SO-Trabalho1
 
 
-Parte 1 — Interpretador
-  1. Ler e dividir linha por linha
-  2. Interpretar cada política e seus argumentos
-  3. Validar e armazenar num vetor
-  4. Verificar conflitos de tempo em REAL-TIME
 
-Parte 2 — Escalonador
- 
-  5. Executar processos (fork/exec)
-  6. Controlar com sinais
-  7. PRIORIDADE
-  8. ROUND-ROBIN
-  9. REAL-TIME
-  10. Monitorar tempo e ciclos
+### PARTE 1 — Interpretador de Comandos
+
+- [ ] Abrir e ler o arquivo `entrada.txt` linha por linha.
+- [ ] Simular a leitura de uma linha por segundo (1 UT) com `sleep(1)`.
+- [ ] Extrair corretamente:
+  - [ ] Nome do processo.
+  - [ ] Tipo de escalonamento (PRIORIDADE, ROUND-ROBIN, REAL-TIME).
+  - [ ] Parâmetros específicos (P=, I=, D=).
+- [ ] Armazenar os processos em uma estrutura de dados interna (vetor ou fila).
+- [ ] Validar parâmetros de REAL-TIME:
+  - [ ] Garantir que `I + D <= 60`.
+  - [ ] Verificar conflitos com outros processos REAL-TIME já registrados.
+- [ ] Manter a ordem de chegada dos processos para uso no escalonador.
+
+---
+
+### 🧠 PARTE 2 — Escalonador de Processos
+
+- [ ] Iniciar cada processo com `fork()` e `exec()` (usando executáveis pré-compilados).
+- [ ] Aplicar `SIGSTOP` logo após `exec` para manter todos pausados até o escalonador assumir.
+- [ ] Implementar controle por política de escalonamento:
+
+#### 🎯 PRIORIDADE
+- [ ] Selecionar processo com menor valor de prioridade (maior prioridade lógica).
+- [ ] Enviar `SIGCONT` para o processo com maior prioridade.
+- [ ] Pausar os demais com `SIGSTOP`.
+
+#### 🔁 ROUND-ROBIN
+- [ ] Executar os processos em ordem de chegada.
+- [ ] Alternar a execução a cada 1 UT (1 segundo), usando `SIGSTOP`/`SIGCONT`.
+
+#### ⏱ REAL-TIME
+- [ ] Verificar o tempo atual dentro do minuto (usar `gettimeofday()` ou `time()`).
+- [ ] Ativar processo apenas se dentro de seu intervalo `[I, I+D)`.
+- [ ] Garantir que não haja sobreposição com outros REAL-TIME.
+- [ ] Repetir execução a cada novo minuto.
+
+
 
 ***************************************************************************
 
