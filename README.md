@@ -8,8 +8,8 @@ Parte 1 — Interpretador
   4. Verificar conflitos de tempo em REAL-TIME
 
 Parte 2 — Escalonador
+ 
   5. Executar processos (fork/exec)
-  
   6. Controlar com sinais
   7. PRIORIDADE
   8. ROUND-ROBIN
