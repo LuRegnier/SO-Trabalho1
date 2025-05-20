@@ -9,120 +9,80 @@
 
 #define BUFFER_SIZE 256
 #define TRUE 1
-#define PROCESSOS 10;
+#define PROCESSOS 100;
 
 typedef struct {
     char nome[BUFFER_SIZE];
     int prioridade;
     int i;
     int d;
-    //ponteiro prox
 } Processo;
 
-//fazer memória compartilhada onde a fila de processos vai ser armazenada para passar informações para o escalonador
-
 Processo* adicionar_processo() {
-    //caso vazia cria a fila (lista)
-
-    //adiciona sempre no fim da fila (lista)
+    //adiciona sempre no fim da fila (memória compartilhada)
 }
 
-Processo* tirar_processo() { //s'será chamada pelo escalonador quando for executar um processo
-    //tira processo de qualquer posição fa fila (lista)
+Processo* tirar_processo() { //só será chamada pelo escalonador quando for executar um processo
+    //tira processo de qualquer posição da fila (memória compartilhada) e reorganiza o vetor
 }
 
-void read_command(FILE *input, char *command, char *parameters[]) {
-    // lê a linha do arquivo
-    if (!fgets(command, BUFFER_SIZE, input)) return;
-    command[strcspn(command, "\n")] = '\0';
+int main (void) {
+    //INTERPRETADOR
 
-    int idx = 0;
-    char *p = command;
+    FILE *input = fopen("exec.txt", "r");
 
-    //pulando Run
-    while (*p && isspace((unsigned char)*p)) {
-        p++;
-    }
-    while (*p && !isspace((unsigned char)*p)) {
-        p++;
-    }
-
-    //guardando arquivo
-    while (*p && isspace((unsigned char)*p)) p++;
-    if (!*p) {
-        parameters[0] = NULL;
-        return;
-    }
-
-    parameters[idx++] = p;
-    while (*p && !isspace((unsigned char)*p)) p++;
-    if (*p) {
-        *p = '\0';
-        p++;
-    }
-
-    //guarda parâmetros P=, I= e D=
-    while (*p) {
-        while (*p && isspace((unsigned char)*p)) p++;
-        if (!*p) break;
-
-        if ((p[0]=='P') && p[1]=='=' ) {
-            parameters[idx++] = p;
-        }
-        else if ((p[0]=='I') && p[1]=='=' ) {
-            parameters[idx++] = p;
-        }
-        else if ((p[0]=='D') && p[1]=='=' ) {
-            parameters[idx++] = p;
-        }
-
-        while (*p && !isspace((unsigned char)*p)) p++;
-        if (*p) {
-            *p = '\0';
-            p++;
-        }
-    }
-
-    parameters[idx] = NULL;
-}
-
-int main(void) {
-    char command[BUFFER_SIZE];
-    char *parameters[BUFFER_SIZE / 2];
-    int status;
-
-    FILE *input = fopen("entrada.txt", "r");
     if (!input) {
-        perror("Erro ao abrir entrada.txt");
+        perror("Erro ao abrir exec.txt");
         return 1;
     }
 
-    while (TRUE) {
-        sleep(1);  // espera 1 segundo (1 UT)
+    //fazer memória compartilhada onde a fila de processos vai ser armazenada para passar informações para o escalonador
 
-        read_command(input, command, parameters);
-        if (feof(input)) break;  // fim do arquivo
+    int segmento_fila, status; //segmento_fila: mémoria compartilhada que contém o vetor, fila_processos e status
+    
+    int *fila_processos;
 
-        if (parameters[0] == NULL) continue;  // linha vazia ou mal formada
+    //aloca a memória compartilhada
+    segmento_fila = shmget (IPC_PRIVATE, (sizeof (int) * PROCESSOS), IPC_CREAT | IPC_EXCL | S_IRUSR | S_IWUSR);
+        
+    //associa a memória compartilhada ao processo
+    fila_processos = (int *) shmat (segmento_fila, 0, 0); // comparar o retorno com -1
 
-        pid_t pid = fork();
-        if (pid < 0) {
-            perror("Erro durante o fork!");
-            exit(1);
-        }
-        else if (pid != 0) {
-            waitpid(-1, &status, 0);
-        } else {
-            // Aqui entraria a lógica para adicionar à fila de prontos
-            // (não implementada neste trecho)
-            printf("Processo lido: %s\n", parameters[0]);
-            for (int i = 1; parameters[i] != NULL; i++) {
-                printf("  Param: %s\n", parameters[i]);
-            }
-            exit(0);  // termina o filho aqui
-        }
+    //ler arquivo linha por linha com uma pausa de 1 ut (segundo) entre cada leitura!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    
+    //para cada elemento lido no arquivo txt é colocado na memória compartilhada
+    for (int j = 0; j < PROCESSOS; j++) {
+        //fila_processos[j].prioridade =;
+        //.i=;
+        //.d=;
     }
 
+    int id = fork();
+    if (id < 0) {
+        perror("Erro ao criar processo");
+        exit(1);
+    }
+    else if (id != 0){ //bloco do PAI
+       waitpid(-1, &status, 0); 
+    }
+    else { //bloco do FILHO
+    //processo do ESCALONADOR
+    //chama função escalonador()?
+    }
+
+
+    // FIM DO CÓDIGO : ----------------- libera memória, libera o arquivo texto ------------------------
+    //libera a memória compartilhada do processo
+    shmdt(fila_processos);
+
+
+    //libera a memória compartilhada
+    shmctl(segmento_fila, IPC_RMID, 0);
+
+    //fechando o arquivo 
     fclose(input);
+
+    printf("Processo PAI: FIM\n");
+
     return 0;
 }
