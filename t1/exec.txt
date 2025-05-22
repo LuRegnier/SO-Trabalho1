@@ -1,0 +1,5 @@
+Run naturais.c
+Run fibonacci.c I=5 D=5
+Run pares.c
+Run impares.c P=0
+Run multiplos5.c I=20 D=2

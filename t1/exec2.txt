@@ -1,0 +1,4 @@
+Run fibonacci.c I=5 D=10
+Run pares.c
+Run impares.c P=2
+Run teste.c P=1 I=3 D=8

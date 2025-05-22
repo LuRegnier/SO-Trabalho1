@@ -1,0 +1,3 @@
+Run fibonacci.c I=5 D=5
+Run pares.c
+Run impares.c P=0
