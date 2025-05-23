@@ -10,12 +10,16 @@
 
 #define PROCESSOS 5
 #define BUFFER_SIZE 256 //número de caracteres máximo de uma comando no arquivo txt
+#define TRUE 1
+#define FALSE 0
 
 typedef struct { //estrutura da fila de processos
+    int id;
     char nome[BUFFER_SIZE];
     int prioridade; //prioridade de um processo - menor é mais prioritário
     int i; //início - real time
     int d; //duração - real time
+    int novo;
 } Processo;
 
 // Vetor compartilhado
@@ -35,7 +39,7 @@ Processo* adicionar_processo(Processo novo) {
 }
 
 // Remove um processo de qualquer posição do vetor e reorganiza a fila
-Processo* tirar_processo(int indice) {
+Processo* retirar_processo(int indice) {
     if (indice < 0 || indice >= total_processos) {
         printf("Índice inválido para remoção.\n");
         return NULL;
@@ -53,37 +57,59 @@ Processo* tirar_processo(int indice) {
     return removido;
 }
 
+int acha_maior_prioridade(Processo *fila_processos) {
+    int indice_maior = -1;
+    int maior_prioridade = 8;  //fora do intervalo válido (0–7)
+
+    for (int i = 0; i < PROCESSOS; i++) {
+        if (fila_processos[i].prioridade >= 0 && fila_processos[i].prioridade <= 7) {
+            if (fila_processos[i].prioridade < maior_prioridade) {
+                maior_prioridade = fila_processos[i].prioridade;
+                indice_maior = i;
+            }
+        }
+    }
+
+    return indice_maior;  //retorna o índice do processo com maior prioridade
+}
+
 //func de exibir elementos da fila
 
 // Função principal do escalonador (filho) <<<<<<<<<<<
-void escalonador(/*mem comp*/) {
-    while (1) {
-        sleep(1); 
-        // 1 UT (unidade de tempo)
+void escalonador(/*mem comp*/, int segundo_atual) {
 
-        // Aqui ele vai ver a lógica de escalonamento por politica
-        for (int i = 0; i < total_processos; i++ /*chama funcao de busca no vetor*/)   {
-            Processo *p = &fila_processos[i];
+    Processo executando;
+    executando.prioridade = -1;
+    executando.i = -1;
+    executando.d = -1;
 
-            // switch (p->tipo) {
-            //     case 0: // caso prioridade
-            //         Selecionar o de menor prioridade
-            //         Dar SIGCONT no escolhido, SIGSTOP nos outros
-            //         break;
+    while (TRUE) {
+        sleep(1); //1 UT (unidade de tempo)
 
-            //     case 1: // caso round robin
-            //         Executar um processo por vez
-            //         1 UT
-            //         break;
+        for (int i = 0; i < PROCESSOS; i++ /*chama funcao de busca no vetor*/)   {
+            if (p.novo == TRUE){
+                execvp("./nome", NULL );
+                kill(p.id, SIGSTOP);
+                p.novo = FALSE;
+            }
 
-            //     case 2: // caso real time
-            //         Verificar tempo atual e comparar com (i, i+d)
-            //         Dar SIGCONT se dentro da janela, SIGSTOP se fora
-            //         break;
-            // }
+            Processo p = fila_processos[i];
 
-            if (p.i != -1 && p.d != -1 && p.prioridade == -1) { //caso real-time
+            int fim = p.i + p.d; //pode ser desnecessário! caso de comparação abaixo também.
 
+            if (p.i != -1 && p.d != -1 && p.prioridade == -1 && p.i == segundo_atual && segundo_atual <= fim) { //caso real-time
+                strcpy(executando.nome, p.nome);
+                executando.prioridade = p.prioridade;
+                executando.i = p.i;
+                executando.d = p.d;
+                
+                retirar_processo(p);
+                kill (p.id,SIGCONT);
+                sleep(1);
+                if (executando.d > 0) {
+                    sleep(1);
+                    executando.d = executando.d -1;
+                }
             }
             else if (p.i == -1 && p.d == -1 && p.prioridade != -1) { //caso prioridade
 
@@ -115,7 +141,24 @@ int main (int argc, char *argv[]) {
         return 1;
     }
 
+    int status;
+
+    for (int j = 0; j < PROCESSOS; j++) {
+        int pid = fork();
+        fila_processos.id = pid;
+        if (pid < 0) {
+            perror();
+            exit(1);
+        }
+        else if (pid == 0) {
+            //execvp("./nome", NULL);
+            kill(p.id, SIGSTOP);
+        }   
+    }
+
     //chamar escalonador dando como parametro a memoria compartilhada!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    int segundo_atual = 0;
+    //escalonador();
 
     // FIM DO CÓDIGO : ----------------- libera memória ------------------------
 
