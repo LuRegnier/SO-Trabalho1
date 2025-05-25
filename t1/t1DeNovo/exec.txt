@@ -1,0 +1,5 @@
+Run naturais
+Run fibonacci I=5 D=4
+Run pares P=2
+Run impares
+Run multiplos5 P=1
