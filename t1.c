@@ -70,8 +70,6 @@ int main (void) {
     //chama função escalonador()?
     }
 
-
-    // FIM DO CÓDIGO : ----------------- libera memória, libera o arquivo texto ------------------------
     //libera a memória compartilhada do processo
     shmdt(fila_processos);
 
@@ -86,3 +84,4 @@ int main (void) {
 
     return 0;
 }
+
